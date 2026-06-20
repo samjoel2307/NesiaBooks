@@ -1,0 +1,2514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nesia Books | Official Educational Publisher — Chennai</title>
+  <meta name="description" content="Nesia Books — Premium educational publisher trusted by 500+ schools across India. Quality curriculum-aligned books for LKG–Grade 8. Founded 2014, Chennai.">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* =============================================
+       DESIGN TOKENS
+    ============================================= */
+    :root {
+      --green-900: #0a2e13;
+      --green-800: #0d3d1a;
+      --green-700: #1a5228;
+      --green-600: #2e7d32;
+      --green-400: #4caf50;
+      --green-100: #e8f5e9;
+      --green-50:  #f1f8f2;
+      --gold-600:  #b8962e;
+      --gold-500:  #D4AF37;
+      --gold-400:  #e2c558;
+      --gold-100:  #fdf6dc;
+      --ink:       #111b14;
+      --ink-70:    #374b3c;
+      --ink-40:    #7a8f80;
+      --ink-10:    #eef3ef;
+      --white:     #ffffff;
+      --cream:     #fafcfa;
+      --shadow-card: 0 4px 24px rgba(10,46,19,0.08);
+      --shadow-lift: 0 16px 48px rgba(10,46,19,0.14);
+      --radius-card: 20px;
+      --radius-pill: 100px;
+      --transition: 0.28s cubic-bezier(0.4,0,0.2,1);
+      --tilt-transition: transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s cubic-bezier(0.22,1,0.36,1);
+      --depth-shadow: 0 2px 2px rgba(10,46,19,0.06), 0 8px 16px rgba(10,46,19,0.08), 0 24px 48px rgba(10,46,19,0.10);
+      --depth-shadow-lift: 0 2px 2px rgba(10,46,19,0.08), 0 16px 24px rgba(10,46,19,0.14), 0 40px 70px rgba(10,46,19,0.22);
+    }
+    [data-theme="dark"] {
+      --green-50: #111b14;
+      --cream: #111b14;
+      --white: #1a2a1d;
+      --ink: #e8f0ea;
+      --ink-70: #adbfb1;
+      --ink-40: #6a7f6e;
+      --ink-10: #1e2e21;
+      --shadow-card: 0 4px 24px rgba(0,0,0,0.3);
+    }
+
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.65;
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* =============================================
+       LOADING SCREEN
+    ============================================= */
+    #loader {
+      position: fixed; inset: 0;
+      background: var(--green-800);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s, visibility 0.5s;
+    }
+    #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .loader-logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--white);
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 28px;
+    }
+    .loader-logo span { color: var(--gold-500); }
+    .loader-bar {
+      width: 200px; height: 3px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .loader-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-500), var(--gold-400));
+      border-radius: 3px;
+      animation: loadFill 1.4s ease forwards;
+    }
+    @keyframes loadFill { from{width:0} to{width:100%} }
+
+    /* =============================================
+       SCROLL PROGRESS
+    ============================================= */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold-500), var(--green-400));
+      z-index: 2000;
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    /* =============================================
+       NAVIGATION
+    ============================================= */
+    nav {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(10,46,19,0.06);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+      transition: box-shadow 0.3s, background 0.3s;
+    }
+    [data-theme="dark"] nav { background: rgba(17,27,20,0.97); }
+    nav.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.1); }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 800;
+      color: var(--green-800);
+      text-decoration: none;
+    }
+    [data-theme="dark"] .nav-brand { color: var(--green-100); }
+    .nav-brand img { height: 40px; border-radius: 8px; transition: transform 0.4s cubic-bezier(0.22,1,0.36,1); }
+    .nav-brand:hover img { transform: perspective(300px) rotateY(18deg) scale(1.06); }
+    .nav-brand span { color: var(--green-700); }
+    [data-theme="dark"] .nav-brand span { color: var(--gold-400); }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 8px;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink-70);
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--green-700);
+      background: var(--green-50);
+    }
+    [data-theme="dark"] .nav-links a:hover { background: var(--ink-10); color: var(--green-400); }
+
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .nav-search-toggle {
+      background: none; border: none; cursor: pointer;
+      color: var(--ink-70); padding: 8px; border-radius: 8px;
+      font-size: 1rem; transition: var(--transition);
+    }
+    .nav-search-toggle:hover { background: var(--green-50); color: var(--green-700); }
+    .dark-toggle {
+      background: none; border: 1.5px solid var(--ink-10);
+      border-radius: 8px; padding: 7px 10px;
+      cursor: pointer; color: var(--ink-70);
+      font-size: 0.9rem; transition: var(--transition);
+    }
+    .dark-toggle:hover { border-color: var(--green-600); color: var(--green-700); }
+    .nav-cta {
+      background: var(--green-700);
+      color: white !important;
+      padding: 9px 20px !important;
+      border-radius: var(--radius-pill) !important;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover { background: var(--green-600) !important; color: white !important; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer;
+      padding: 6px;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--ink); border-radius: 2px;
+      transition: var(--transition);
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 68px; left: 0; right: 0;
+      background: var(--white);
+      padding: 20px 5%;
+      border-bottom: 1px solid var(--ink-10);
+      z-index: 999;
+      box-shadow: var(--shadow-lift);
+    }
+    [data-theme="dark"] .mobile-menu { background: var(--green-900); }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a {
+      display: block; padding: 13px 0;
+      text-decoration: none; color: var(--ink);
+      font-weight: 500; border-bottom: 1px solid var(--ink-10);
+      font-size: 1.05rem;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    /* Search Overlay */
+    .search-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(10,46,19,0.92);
+      backdrop-filter: blur(8px);
+      z-index: 1100;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 120px;
+    }
+    .search-overlay.open { display: flex; }
+    .search-box {
+      width: 90%; max-width: 680px;
+    }
+    .search-input-wrap {
+      display: flex; align-items: center; gap: 12px;
+      background: white;
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+    }
+    .search-input-wrap i { color: var(--ink-40); font-size: 1.1rem; }
+    .search-input-wrap input {
+      flex: 1; border: none; outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.15rem; color: var(--ink);
+      background: transparent;
+    }
+    .search-close {
+      background: none; border: none; cursor: pointer;
+      color: white; font-size: 1.5rem; padding: 4px;
+    }
+    .search-results {
+      margin-top: 16px;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .search-result-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--ink-10);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .search-result-item:last-child { border-bottom: none; }
+    .search-result-item:hover { background: var(--green-50); }
+    .search-result-item img { width: 38px; height: 52px; object-fit: cover; border-radius: 6px; }
+    .search-result-meta { flex: 1; }
+    .search-result-meta strong { display: block; font-weight: 600; font-size: 0.95rem; }
+    .search-result-meta span { color: var(--ink-40); font-size: 0.82rem; }
+    .search-badge {
+      background: var(--green-100); color: var(--green-700);
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 0.78rem; font-weight: 600;
+    }
+    .search-empty {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--ink-40);
+      font-size: 0.95rem;
+    }
+
+    /* =============================================
+       HERO
+    ============================================= */
+    .hero {
+      min-height: 94vh;
+      background: linear-gradient(135deg, var(--green-900) 0%, var(--green-700) 55%, #2a6b35 100%);
+      display: flex; align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 100px 5% 80px;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero-orb-1 {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(212,175,55,0.22), transparent 70%);
+      top: -120px; left: -80px;
+      animation: orbDrift1 14s ease-in-out infinite;
+    }
+    .hero-orb-2 {
+      width: 360px; height: 360px;
+      background: radial-gradient(circle, rgba(76,175,80,0.28), transparent 70%);
+      bottom: -140px; right: -60px;
+      animation: orbDrift2 17s ease-in-out infinite;
+    }
+    @keyframes orbDrift1 { 0%,100%{ transform:translate(0,0) } 50%{ transform:translate(40px,30px) } }
+    @keyframes orbDrift2 { 0%,100%{ transform:translate(0,0) } 50%{ transform:translate(-30px,-40px) } }
+    .hero-particle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--gold-400);
+      pointer-events: none;
+      opacity: 0.5;
+      z-index: 0;
+      animation: particleDrift linear infinite;
+    }
+    @keyframes particleDrift {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(-120px) translateX(var(--drift, 20px)); opacity: 0; }
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+      max-width: 1200px; margin: 0 auto; width: 100%;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(212,175,55,0.18);
+      border: 1px solid rgba(212,175,55,0.4);
+      color: var(--gold-400);
+      padding: 6px 16px; border-radius: var(--radius-pill);
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px;
+      text-transform: uppercase; margin-bottom: 22px;
+    }
+    .hero-badge i { font-size: 0.75rem; }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 5vw, 4rem);
+      color: var(--white);
+      font-weight: 800;
+      line-height: 1.18;
+      margin-bottom: 22px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold-400);
+    }
+    .hero p {
+      color: rgba(255,255,255,0.82);
+      font-size: 1.1rem;
+      max-width: 480px;
+      margin-bottom: 36px;
+      font-weight: 400;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--gold-500);
+      color: var(--green-900);
+      padding: 14px 32px;
+      border-radius: var(--radius-pill);
+      font-weight: 700; font-size: 0.95rem;
+      text-decoration: none;
+      border: none; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: var(--transition);
+      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
+    }
+    .btn-primary:hover {
+      background: var(--gold-400);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(212,175,55,0.4);
+    }
+    .btn-outline {
+      background: transparent;
+      color: white;
+      padding: 14px 32px;
+      border-radius: var(--radius-pill);
+      font-weight: 600; font-size: 0.95rem;
+      text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: var(--transition);
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.7);
+    }
+    .hero-trust {
+      display: flex; gap: 24px; margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    .trust-badge {
+      display: flex; align-items: center; gap: 8px;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.82rem; font-weight: 500;
+    }
+    .trust-badge i { color: var(--gold-400); }
+
+    /* Floating book mockups */
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+      position: relative; height: 480px;
+      perspective: 1400px;
+    }
+    .hero-spotlight {
+      position: absolute; inset: -100px;
+      background: radial-gradient(circle 260px at var(--mx,50%) var(--my,50%), rgba(212,175,55,0.22), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero-scene {
+      position: relative;
+      width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+      will-change: transform;
+    }
+    .book-float {
+      position: absolute;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+    }
+    .book-float img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .bf-1 {
+      width: 170px; height: 220px;
+      top: 20px; left: 50%;
+      transform: translateX(-50%) translateZ(90px) rotate(-6deg);
+      animation: floatA 4s ease-in-out infinite;
+      z-index: 3;
+    }
+    .bf-2 {
+      width: 140px; height: 190px;
+      top: 80px; left: 15%;
+      transform: translateZ(40px) rotate(8deg);
+      animation: floatB 4.5s ease-in-out infinite;
+      z-index: 2;
+    }
+    .bf-3 {
+      width: 150px; height: 200px;
+      top: 80px; right: 12%;
+      transform: translateZ(55px) rotate(-4deg);
+      animation: floatC 5s ease-in-out infinite;
+      z-index: 2;
+    }
+    .bf-glow {
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,175,55,0.15), transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) translateZ(-60px);
+      animation: glowPulse 5s ease-in-out infinite;
+    }
+    @keyframes floatA { 0%,100%{transform:translateX(-50%) translateZ(90px) rotate(-6deg) translateY(0)} 50%{transform:translateX(-50%) translateZ(90px) rotate(-6deg) translateY(-14px)} }
+    @keyframes floatB { 0%,100%{transform:translateZ(40px) rotate(8deg) translateY(0)} 50%{transform:translateZ(40px) rotate(8deg) translateY(-10px)} }
+    @keyframes floatC { 0%,100%{transform:translateZ(55px) rotate(-4deg) translateY(0)} 50%{transform:translateZ(55px) rotate(-4deg) translateY(-12px)} }
+    @keyframes glowPulse { 0%,100%{ transform:translate(-50%,-50%) translateZ(-60px) scale(1); opacity:0.7 } 50%{ transform:translate(-50%,-50%) translateZ(-60px) scale(1.15); opacity:1 } }
+
+    /* =============================================
+       STATS BAR
+    ============================================= */
+    .hero-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+    .stats-bar {
+      background: var(--green-800);
+      padding: 36px 5%;
+      display: flex; justify-content: space-around; flex-wrap: wrap; gap: 24px;
+      perspective: 1000px;
+    }
+    .stat-item {
+      text-align: center;
+      transform-style: preserve-3d;
+      transition: var(--tilt-transition);
+      will-change: transform;
+      border-radius: 18px;
+      padding: 6px 10px;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem; font-weight: 800;
+      color: var(--gold-500);
+      line-height: 1;
+      transform: translateZ(20px);
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+    .stat-lbl { color: rgba(255,255,255,0.75); font-size: 0.88rem; margin-top: 4px; font-weight: 500; transform: translateZ(10px); }
+    .stat-item.tilting { background: rgba(255,255,255,0.06); }
+
+    /* =============================================
+       SECTION HELPERS
+    ============================================= */
+    .section { padding: 90px 5%; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-head { text-align: center; margin-bottom: 60px; }
+    .section-eyebrow {
+      display: inline-block;
+      color: var(--green-600); font-weight: 700;
+      font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-head h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.9rem, 4vw, 2.6rem);
+      color: var(--green-800);
+      font-weight: 800; line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    [data-theme="dark"] .section-head h2 { color: var(--green-100); }
+    .section-lead {
+      color: var(--ink-40);
+      max-width: 560px; margin: 0 auto;
+      font-size: 1rem;
+    }
+    .gold-line {
+      width: 50px; height: 3px;
+      background: var(--gold-500);
+      border-radius: 3px;
+      margin: 16px auto 0;
+    }
+
+    /* Fade-in on scroll, with 3D tilt-up */
+    .fade-up {
+      opacity: 0;
+      transform: perspective(1000px) translateY(34px) rotateX(8deg) scale(0.97);
+      transform-origin: bottom center;
+      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: perspective(1000px) translateY(0) rotateX(0) scale(1);
+    }
+
+    /* =============================================
+       ABOUT
+    ============================================= */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+      perspective: 1400px;
+    }
+    .about-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; color: var(--green-800);
+      margin-bottom: 18px; font-weight: 800;
+    }
+    [data-theme="dark"] .about-text h3 { color: var(--green-100); }
+    .about-text p { color: var(--ink-70); margin-bottom: 18px; }
+    .about-checks { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+    .about-check {
+      display: flex; align-items: center; gap: 12px;
+      color: var(--ink-70); font-weight: 500;
+    }
+    .check-icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--green-100);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .check-icon i { color: var(--green-700); font-size: 0.75rem; }
+    .about-card {
+      background: linear-gradient(140deg, var(--green-800), var(--green-700));
+      border-radius: 28px;
+      padding: 40px 36px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: var(--tilt-transition);
+      will-change: transform;
+    }
+    .about-card::before {
+      content: '"';
+      position: absolute;
+      top: -20px; left: 20px;
+      font-family: 'Playfair Display', serif;
+      font-size: 12rem;
+      opacity: 0.06;
+      line-height: 1;
+      color: white;
+    }
+    .about-card p {
+      font-size: 1.2rem;
+      line-height: 1.7;
+      margin-bottom: 24px;
+      color: rgba(255,255,255,0.9);
+      transform: translateZ(34px);
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+    .about-card-detail { color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.8; transform: translateZ(20px); transition: transform 0.5s cubic-bezier(0.22,1,0.36,1); }
+    .about-card-detail i { color: var(--gold-400); margin-right: 8px; }
+    .about-card-detail div { margin-bottom: 8px; }
+
+    /* =============================================
+       WHY CHOOSE US
+    ============================================= */
+    .why-section { background: var(--green-50); }
+    [data-theme="dark"] .why-section { background: var(--ink-10); }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 24px;
+      perspective: 1200px;
+    }
+    .why-card {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      padding: 32px 24px;
+      text-align: center;
+      border: 1px solid var(--ink-10);
+      transition: var(--tilt-transition);
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .why-card:hover {
+      box-shadow: var(--depth-shadow-lift);
+      border-color: var(--gold-100);
+    }
+    .why-icon {
+      width: 60px; height: 60px;
+      border-radius: 18px;
+      background: var(--green-100);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px;
+      font-size: 1.5rem;
+      transform: translateZ(30px);
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+    .why-card h4 {
+      color: var(--green-800); font-weight: 700;
+      margin-bottom: 8px; font-size: 0.95rem;
+    }
+    [data-theme="dark"] .why-card h4 { color: var(--green-100); }
+    .why-card p { color: var(--ink-40); font-size: 0.83rem; line-height: 1.55; }
+
+    /* =============================================
+       BOOKS / PUBLICATIONS
+    ============================================= */
+    .books-section { background: var(--cream); }
+    .books-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap; margin-bottom: 36px;
+    }
+    .filter-scroll {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 8px 20px;
+      border-radius: var(--radius-pill);
+      border: 1.5px solid var(--ink-10);
+      background: var(--white);
+      color: var(--ink-70);
+      font-weight: 600; font-size: 0.85rem;
+      cursor: pointer; transition: var(--transition);
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--green-700); color: white; border-color: var(--green-700);
+    }
+    .books-count {
+      color: var(--ink-40); font-size: 0.85rem; font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 28px;
+      perspective: 1400px;
+    }
+    .book-card {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      padding: 22px 18px 24px;
+      border: 1px solid var(--ink-10);
+      box-shadow: var(--depth-shadow);
+      display: flex; flex-direction: column;
+      transition: var(--tilt-transition), border-color var(--transition);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .book-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(125deg, rgba(255,255,255,0.55), rgba(255,255,255,0) 45%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+      border-radius: inherit;
+    }
+    .book-card.tilting::after { opacity: 1; }
+    .book-card.tilting {
+      box-shadow: var(--depth-shadow-lift);
+      border-color: rgba(212,175,55,0.3);
+      z-index: 5;
+    }
+    .book-card .book-img { transform: translateZ(36px); transition: transform 0.5s cubic-bezier(0.22,1,0.36,1); }
+    .book-card .book-badge { transform: translateZ(50px); transition: transform 0.5s cubic-bezier(0.22,1,0.36,1); }
+    .book-card .book-tag, .book-card h3, .book-card .book-meta { transform: translateZ(24px); transition: transform 0.5s cubic-bezier(0.22,1,0.36,1); }
+    .book-card .book-actions { transform: translateZ(30px); transition: transform 0.5s cubic-bezier(0.22,1,0.36,1); }
+    .book-card:hover {
+      box-shadow: var(--depth-shadow-lift);
+      border-color: rgba(212,175,55,0.25);
+    }
+    .book-badge {
+      position: absolute; top: 14px; left: 14px;
+      background: var(--gold-500); color: var(--green-900);
+      font-size: 0.7rem; font-weight: 700;
+      padding: 3px 10px; border-radius: var(--radius-pill);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .book-badge.new { background: #4caf50; color: white; }
+    .book-img {
+      height: 240px;
+      background: var(--green-50);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .book-img img {
+      max-height: 90%; max-width: 85%;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+      transition: transform 0.3s;
+    }
+    .book-card:hover .book-img img { transform: scale(1.04); }
+    .book-card h3 {
+      font-weight: 700; font-size: 1rem;
+      color: var(--green-800); margin-bottom: 4px;
+    }
+    [data-theme="dark"] .book-card h3 { color: var(--green-100); }
+    .book-meta {
+      color: var(--ink-40); font-size: 0.82rem;
+      margin-bottom: 16px; flex: 1;
+    }
+    .book-tag {
+      display: inline-block;
+      background: var(--green-100);
+      color: var(--green-700);
+      padding: 2px 9px;
+      border-radius: 20px;
+      font-size: 0.74rem; font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .book-actions { display: flex; gap: 8px; }
+    .btn-enquire {
+      flex: 1;
+      background: var(--green-700);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--radius-pill);
+      font-weight: 600; font-size: 0.82rem;
+      cursor: pointer; transition: var(--transition);
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      text-decoration: none;
+    }
+    .btn-enquire:hover { background: var(--green-600); }
+    .btn-preview {
+      background: var(--ink-10);
+      border: none;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      cursor: pointer; transition: var(--transition);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink-40); font-size: 0.85rem;
+    }
+    .btn-preview:hover { background: var(--green-100); color: var(--green-700); }
+
+    .load-more-wrap { text-align: center; margin-top: 44px; }
+    .btn-load-more {
+      background: transparent;
+      border: 1.5px solid var(--green-700);
+      color: var(--green-700);
+      padding: 12px 32px;
+      border-radius: var(--radius-pill);
+      font-weight: 600; cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-load-more:hover { background: var(--green-700); color: white; }
+
+    /* =============================================
+       BOOK MODAL
+    ============================================= */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(10,46,19,0.88);
+      backdrop-filter: blur(6px);
+      z-index: 1200;
+      align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--white);
+      border-radius: 28px;
+      max-width: 680px; width: 100%;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+      animation: modalIn 0.45s cubic-bezier(0.22,1,0.36,1);
+      transform-origin: center top;
+    }
+    @keyframes modalIn { from{opacity:0; transform:perspective(1200px) rotateX(14deg) translateY(20px) scale(0.94)} to{opacity:1; transform:perspective(1200px) rotateX(0) translateY(0) scale(1)} }
+    .modal-header {
+      background: linear-gradient(135deg, var(--green-800), var(--green-700));
+      padding: 28px 32px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .modal-header h3 {
+      font-family: 'Playfair Display', serif;
+      color: white; font-size: 1.5rem; font-weight: 800;
+    }
+    .modal-header p { color: rgba(255,255,255,0.75); font-size: 0.88rem; margin-top: 4px; }
+    .modal-close {
+      background: rgba(255,255,255,0.15); border: none;
+      color: white; width: 36px; height: 36px;
+      border-radius: 50%; cursor: pointer; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition); flex-shrink: 0;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.3); }
+    .modal-body {
+      padding: 32px;
+      display: grid; grid-template-columns: 160px 1fr; gap: 28px;
+    }
+    .modal-book-img {
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--green-50);
+      display: flex; align-items: center; justify-content: center;
+      height: 200px;
+    }
+    .modal-book-img img { max-height: 95%; max-width: 95%; object-fit: contain; }
+    .modal-info p { color: var(--ink-70); font-size: 0.9rem; margin-bottom: 14px; line-height: 1.6; }
+    .modal-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; color: var(--green-700); font-weight: 800;
+    }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+    /* =============================================
+       CATEGORIES
+    ============================================= */
+    .categories-section { background: var(--green-800); }
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 20px;
+      perspective: 1200px;
+    }
+    .cat-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 28px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--tilt-transition), background 0.3s, border-color 0.3s;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .cat-card:hover {
+      background: rgba(212,175,55,0.15);
+      border-color: rgba(212,175,55,0.4);
+    }
+    .cat-card .cat-icon { font-size: 2.2rem; margin-bottom: 12px; display: block; transform: translateZ(40px); transition: transform 0.5s cubic-bezier(0.22,1,0.36,1); }
+    .cat-card h4 { color: white; font-size: 0.88rem; font-weight: 700; margin-bottom: 4px; }
+    .cat-card span { color: rgba(255,255,255,0.5); font-size: 0.78rem; }
+    .cat-card.active-cat { background: rgba(212,175,55,0.2); border-color: var(--gold-500); }
+
+    /* =============================================
+       BESTSELLERS / NEW ARRIVALS
+    ============================================= */
+    .bestsellers-row {
+      display: flex; gap: 20px; overflow-x: auto;
+      padding-bottom: 12px; scroll-snap-type: x mandatory;
+      scrollbar-width: thin; scrollbar-color: var(--ink-10) transparent;
+      perspective: 1200px;
+    }
+    .bestsellers-row::-webkit-scrollbar { height: 4px; }
+    .bestsellers-row::-webkit-scrollbar-track { background: transparent; }
+    .bestsellers-row::-webkit-scrollbar-thumb { background: var(--ink-10); border-radius: 4px; }
+    .bs-card {
+      min-width: 200px;
+      background: var(--white);
+      border-radius: 18px;
+      padding: 18px;
+      border: 1px solid var(--ink-10);
+      scroll-snap-align: start;
+      transition: var(--tilt-transition);
+      flex-shrink: 0;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .bs-card:hover { box-shadow: var(--depth-shadow-lift); }
+    .bs-img {
+      height: 180px; background: var(--green-50);
+      border-radius: 10px; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+      transform: translateZ(28px);
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+    .bs-img img { max-height: 90%; max-width: 90%; object-fit: contain; }
+    .bs-card h4 { font-size: 0.85rem; font-weight: 700; color: var(--green-800); margin-bottom: 4px; }
+    [data-theme="dark"] .bs-card h4 { color: var(--green-100); }
+    .bs-card p { color: var(--ink-40); font-size: 0.78rem; }
+
+    /* =============================================
+       PRICING
+    ============================================= */
+    .pricing-section { background: var(--cream); }
+    .price-box {
+      background: var(--white);
+      border-radius: 28px;
+      padding: 48px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--ink-10);
+    }
+    .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; }
+    .price-cat h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--green-800); font-size: 1.25rem;
+      border-left: 4px solid var(--gold-500);
+      padding-left: 16px;
+      margin-bottom: 20px;
+    }
+    [data-theme="dark"] .price-cat h3 { color: var(--green-100); }
+    .price-cat ul { list-style: none; }
+    .price-cat li {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--ink-10);
+      font-size: 0.9rem; color: var(--ink-70);
+    }
+    .price-cat li:last-child { border-bottom: none; }
+    .price-cat li .price { font-weight: 700; color: var(--green-700); font-size: 0.95rem; }
+    .price-download { text-align: center; margin-top: 36px; }
+
+    /* =============================================
+       TESTIMONIALS
+    ============================================= */
+    .testimonials-section { background: var(--green-50); }
+    [data-theme="dark"] .testimonials-section { background: var(--ink-10); }
+    .testi-slider { position: relative; overflow: hidden; perspective: 1400px; }
+    .testi-track {
+      display: flex;
+      transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .testi-card {
+      min-width: 100%;
+      padding: 0 20px;
+    }
+    .testi-inner {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 760px; margin: 0 auto;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--ink-10);
+      text-align: center;
+      transform-style: preserve-3d;
+      transition: var(--tilt-transition);
+      will-change: transform;
+    }
+    .testi-stars { color: var(--gold-500); font-size: 1rem; margin-bottom: 20px; transform: translateZ(30px); }
+    .testi-inner blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; color: var(--green-800);
+      line-height: 1.7; margin-bottom: 28px;
+      font-style: italic;
+      transform: translateZ(36px);
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+    [data-theme="dark"] .testi-inner blockquote { color: var(--green-100); }
+    .testi-author { display: flex; align-items: center; gap: 14px; justify-content: center; }
+    .testi-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--green-700);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 700; font-size: 1.1rem;
+    }
+    .testi-author-info strong { display: block; font-weight: 700; color: var(--ink); font-size: 0.95rem; }
+    [data-theme="dark"] .testi-author-info strong { color: var(--green-100); }
+    .testi-author-info span { color: var(--ink-40); font-size: 0.82rem; }
+    .testi-dots {
+      display: flex; justify-content: center; gap: 8px; margin-top: 28px;
+    }
+    .testi-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--ink-10); border: none; cursor: pointer;
+      transition: var(--transition);
+    }
+    .testi-dot.active { background: var(--green-700); width: 22px; border-radius: 4px; }
+    .testi-arrows { display: flex; justify-content: center; gap: 12px; margin-top: 16px; }
+    .testi-arrow {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1.5px solid var(--ink-10);
+      background: var(--white); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink-70); transition: var(--transition);
+    }
+    .testi-arrow:hover { border-color: var(--green-700); color: var(--green-700); }
+
+    /* =============================================
+       FAQ
+    ============================================= */
+    .faq-section { background: var(--cream); }
+    .faq-list { max-width: 760px; margin: 0 auto; }
+    .faq-item {
+      border: 1px solid var(--ink-10);
+      border-radius: 16px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      background: var(--white);
+    }
+    .faq-q {
+      width: 100%;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 24px;
+      background: none; border: none; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600; font-size: 0.95rem;
+      color: var(--ink); text-align: left;
+      transition: var(--transition);
+    }
+    .faq-q:hover { color: var(--green-700); }
+    .faq-q i { color: var(--ink-40); transition: transform 0.3s; }
+    .faq-item.open .faq-q i { transform: rotate(45deg); color: var(--green-700); }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.3s;
+      padding: 0 24px;
+      color: var(--ink-70); font-size: 0.9rem; line-height: 1.7;
+    }
+    .faq-item.open .faq-a { max-height: 200px; padding: 0 24px 20px; }
+
+    /* =============================================
+       NEWSLETTER
+    ============================================= */
+    .newsletter-section {
+      background: linear-gradient(135deg, var(--green-800), var(--green-700));
+      text-align: center;
+      padding: 80px 5%;
+    }
+    .newsletter-section h2 {
+      font-family: 'Playfair Display', serif;
+      color: white; font-size: 2.2rem; font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .newsletter-section p { color: rgba(255,255,255,0.8); margin-bottom: 32px; }
+    .newsletter-form {
+      display: flex; gap: 12px; max-width: 480px; margin: 0 auto;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .newsletter-form input {
+      flex: 1; min-width: 240px;
+      padding: 14px 20px;
+      border-radius: var(--radius-pill);
+      border: none; outline: none;
+      font-family: 'Inter', sans-serif; font-size: 0.95rem;
+    }
+    .newsletter-form button {
+      background: var(--gold-500);
+      color: var(--green-900);
+      border: none; padding: 14px 28px;
+      border-radius: var(--radius-pill);
+      font-weight: 700; cursor: pointer;
+      transition: var(--transition);
+    }
+    .newsletter-form button:hover { background: var(--gold-400); }
+
+    /* =============================================
+       CONTACT
+    ============================================= */
+    .contact-section { background: var(--cream); }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1.3fr;
+      gap: 40px;
+      background: var(--white);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--ink-10);
+    }
+    .contact-panel {
+      background: linear-gradient(160deg, var(--green-800), var(--green-700));
+      padding: 44px 36px;
+      color: white;
+    }
+    .contact-panel h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold-400); font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    .contact-panel > p { color: rgba(255,255,255,0.75); margin-bottom: 32px; font-size: 0.9rem; }
+    .contact-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      margin-bottom: 24px;
+    }
+    .contact-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-icon i { color: var(--gold-400); }
+    .contact-item-text strong { display: block; color: white; font-size: 0.88rem; margin-bottom: 2px; }
+    .contact-item-text span { color: rgba(255,255,255,0.65); font-size: 0.85rem; }
+    .map-embed {
+      margin-top: 28px; border-radius: 16px; overflow: hidden;
+      height: 200px; border: 2px solid rgba(255,255,255,0.12);
+    }
+    .map-embed iframe { width: 100%; height: 100%; border: 0; }
+
+    .contact-form-wrap { padding: 44px 40px; }
+    .contact-form-wrap h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--green-800); font-size: 1.5rem; margin-bottom: 6px;
+    }
+    [data-theme="dark"] .contact-form-wrap h3 { color: var(--green-100); }
+    .contact-form-wrap > p { color: var(--ink-40); font-size: 0.85rem; margin-bottom: 28px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1.5px solid var(--ink-10);
+      border-radius: 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+      background: var(--cream);
+      outline: none;
+      transition: var(--transition);
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: var(--green-600);
+      box-shadow: 0 0 0 3px rgba(46,125,50,0.1);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-submit {
+      background: var(--green-700); color: white;
+      border: none; padding: 15px;
+      border-radius: var(--radius-pill);
+      font-weight: 700; font-size: 1rem;
+      cursor: pointer; width: 100%;
+      transition: var(--transition);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .form-submit:hover { background: var(--green-600); transform: translateY(-1px); }
+
+    /* =============================================
+       TOAST
+    ============================================= */
+    .toast {
+      position: fixed; bottom: 100px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--green-800); color: white;
+      padding: 14px 24px; border-radius: var(--radius-pill);
+      font-weight: 600; font-size: 0.9rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      z-index: 2000;
+      opacity: 0; transition: opacity 0.3s, transform 0.3s;
+      display: flex; align-items: center; gap: 10px;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast i { color: var(--gold-400); }
+
+    /* =============================================
+       PARTNER SCHOOLS (logo strip)
+    ============================================= */
+    .partners-section { background: var(--white); }
+    [data-theme="dark"] .partners-section { background: var(--ink-10); }
+    .partners-strip {
+      display: flex; gap: 32px; flex-wrap: wrap;
+      justify-content: center; align-items: center;
+      margin-top: 20px;
+    }
+    .partner-chip {
+      background: var(--green-50);
+      border: 1px solid var(--ink-10);
+      border-radius: 12px;
+      padding: 14px 24px;
+      font-weight: 600; font-size: 0.85rem;
+      color: var(--green-700);
+      transition: var(--transition);
+    }
+    .partner-chip:hover { background: var(--green-100); transform: scale(1.03); }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer {
+      background: var(--green-900);
+      color: rgba(255,255,255,0.75);
+      padding: 60px 5% 30px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px; max-width: 1200px; margin: 0 auto;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      color: white; font-size: 1.4rem; font-weight: 800;
+      margin-bottom: 14px;
+    }
+    .footer-brand span { color: var(--gold-400); }
+    .footer-about { font-size: 0.87rem; line-height: 1.7; margin-bottom: 20px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .social-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.7); text-decoration: none;
+      transition: var(--transition); font-size: 0.9rem;
+    }
+    .social-btn:hover { background: var(--gold-500); color: var(--green-900); }
+    .footer-col h4 {
+      color: white; font-size: 0.85rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 18px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a {
+      color: rgba(255,255,255,0.65); text-decoration: none;
+      font-size: 0.87rem; transition: var(--transition);
+    }
+    .footer-col a:hover { color: var(--gold-400); }
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto;
+      padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+      font-size: 0.82rem;
+    }
+
+    /* =============================================
+       FLOATING ACTIONS
+    ============================================= */
+    .fab-group {
+      position: fixed; bottom: 28px; right: 28px;
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: 12px; z-index: 999;
+    }
+    .fab-wa {
+      background: #25d366; color: white;
+      text-decoration: none;
+      padding: 14px 22px; border-radius: var(--radius-pill);
+      font-weight: 700; font-size: 0.9rem;
+      box-shadow: 0 8px 24px rgba(37,211,102,0.4);
+      display: flex; align-items: center; gap: 8px;
+      transition: var(--transition);
+    }
+    .fab-wa:hover { background: #1eb358; transform: translateY(-2px); }
+    .fab-top {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--green-700); color: white;
+      border: none; cursor: pointer;
+      display: none; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      transition: var(--transition);
+    }
+    .fab-top.visible { display: flex; }
+    .fab-top:hover { background: var(--green-600); transform: translateY(-2px); }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 1024px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 900px) {
+      .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .price-grid { grid-template-columns: 1fr; }
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-visual { display: none; }
+      .hero-actions { justify-content: center; }
+      .hero-trust { justify-content: center; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-actions .dark-toggle, .nav-actions .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .section { padding: 60px 5%; }
+      .price-box { padding: 28px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .contact-form-wrap { padding: 28px 24px; }
+    }
+
+    /* =============================================
+       GALLERY
+    ============================================= */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .gallery-item {
+      border-radius: 16px; overflow: hidden;
+      background: var(--green-50);
+      height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+      border: 1px solid var(--ink-10);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .gallery-item:hover { transform: scale(1.03); box-shadow: var(--shadow-lift); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bf-1, .bf-2, .bf-3, .bf-glow, .hero-orb-1, .hero-orb-2, .hero-particle { animation: none; }
+      .fade-up { opacity: 1; transform: none; }
+      .hero-scene, .book-card, .why-card, .cat-card, .bs-card, .about-card, .testi-inner {
+        transition: none !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loader">
+  <div class="loader-logo">NESIA <span>BOOKS</span></div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toast-msg"></span></div>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search books, subjects, classes…">
+      <button class="search-close" onclick="closeSearch()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- BOOK MODAL -->
+<div class="modal-overlay" id="bookModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3 id="modal-title"></h3>
+        <p id="modal-cat"></p>
+      </div>
+      <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-book-img">
+        <img id="modal-img" src="" alt="">
+      </div>
+      <div class="modal-info">
+        <p id="modal-desc"></p>
+        <div class="modal-price" id="modal-price"></div>
+        <div class="modal-actions">
+          <a id="modal-wa" href="#" target="_blank" class="btn-enquire"><i class="fab fa-whatsapp"></i> WhatsApp Enquiry</a>
+          <button class="btn-preview" onclick="closeModal()"><i class="fas fa-times"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="mainNav">
+  <a class="nav-brand" href="#">
+    <img src="nesia logo.jpg" alt="Nesia Books" onerror="this.src='https://placehold.co/40x40/0d3d1a/D4AF37?text=NB'">
+    NESIA <span>&nbsp;BOOKS</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#books">Books</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-search-toggle" onclick="openSearch()" title="Search"><i class="fas fa-search"></i></button>
+    <button class="dark-toggle" onclick="toggleDark()" id="darkBtn" title="Toggle dark mode"><i class="fas fa-moon"></i></button>
+    <a href="#contact" class="filter-btn nav-cta" style="text-decoration:none;border-radius:100px">Get Catalogue</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="toggleMenu()">About</a>
+  <a href="#books" onclick="toggleMenu()">Our Books</a>
+  <a href="#pricing" onclick="toggleMenu()">Pricing</a>
+  <a href="#testimonials" onclick="toggleMenu()">Reviews</a>
+  <a href="#faq" onclick="toggleMenu()">FAQ</a>
+  <a href="#contact" onclick="toggleMenu()">Contact Us</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-particles" id="heroParticles"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><i class="fas fa-award"></i> Official Educational Publisher Since 2014</div>
+      <h1>Books That <em>Shape</em> Young Futures</h1>
+      <p>Curriculum-aligned, beautifully designed books trusted by 500+ schools across India. From LKG to Grade 8.</p>
+      <div class="hero-actions">
+        <a href="#books" class="btn-primary"><i class="fas fa-book-open"></i> Explore Books</a>
+        <a href="Price list 2026-27.pdf" target="_blank" class="btn-outline"><i class="fas fa-download"></i> Download Catalogue</a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-badge"><i class="fas fa-shield-alt"></i> 10+ Years Excellence</div>
+        <div class="trust-badge"><i class="fas fa-school"></i> 500+ Partner Schools</div>
+        <div class="trust-badge"><i class="fas fa-book"></i> 40+ Titles</div>
+      </div>
+    </div>
+    <div class="hero-visual" id="heroVisual">
+      <div class="hero-spotlight" id="heroSpotlight"></div>
+      <div class="hero-scene" id="heroScene">
+        <div class="bf-glow"></div>
+        <div class="book-float bf-2">
+          <img src="spring kids lkg.jpg" onerror="this.src='https://placehold.co/140x190/2e7d32/white?text=Spring+Kids'" alt="Spring Kids">
+        </div>
+        <div class="book-float bf-1">
+          <img src="wisdom morshel gk 1.jpg" onerror="this.src='https://placehold.co/170x220/D4AF37/1a2421?text=GK+Series'" alt="GK Book">
+        </div>
+        <div class="book-float bf-3">
+          <img src="Roshini hindi reader 5.jpg" onerror="this.src='https://placehold.co/150x200/bf8c3e/white?text=Roshini+Hindi'" alt="Roshini Hindi">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item fade-up">
+    <div class="stat-num" data-target="10">0</div>
+    <div class="stat-lbl">Years of Excellence</div>
+  </div>
+  <div class="stat-item fade-up">
+    <div class="stat-num" data-target="500">0</div>
+    <div class="stat-lbl">Partner Schools</div>
+  </div>
+  <div class="stat-item fade-up">
+    <div class="stat-num" data-target="40">0</div>
+    <div class="stat-lbl">Titles Published</div>
+  </div>
+  <div class="stat-item fade-up">
+    <div class="stat-num" data-target="50000">0</div>
+    <div class="stat-lbl">Students Reached</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <span class="section-eyebrow">Who We Are</span>
+      <h2>Official Publisher Profile</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text fade-up">
+        <h3>Nesia Books — Crafting Learning, One Page at a Time</h3>
+        <p>Founded in 2014 in Chennai, Nesia Books has grown into a trusted educational publisher serving schools across Tamil Nadu and beyond. We specialize in curriculum-aligned books for early childhood through Grade 8.</p>
+        <p>Our editorial team, comprising experienced academicians and educators, ensures that every title balances conceptual rigor with age-appropriate presentation. High-quality printing, vibrant illustrations, and timely delivery define our commitment.</p>
+        <div class="about-checks">
+          <div class="about-check"><div class="check-icon"><i class="fas fa-check"></i></div> Syllabus-based content aligned to national standards</div>
+          <div class="about-check"><div class="check-icon"><i class="fas fa-check"></i></div> Activity-based learning for better retention</div>
+          <div class="about-check"><div class="check-icon"><i class="fas fa-check"></i></div> Affordable pricing for all school budgets</div>
+          <div class="about-check"><div class="check-icon"><i class="fas fa-check"></i></div> On-time delivery guaranteed, every academic year</div>
+        </div>
+      </div>
+      <div class="about-card fade-up" id="aboutCard">
+        <p>"To empower students and support educators through affordable, well-structured educational resources that spark curiosity and build strong foundations."</p>
+        <div class="about-card-detail">
+          <div><i class="fas fa-map-pin"></i>10, 2nd St, Bhaktavatsala Puram, Avadi, Chennai – 600054</div>
+          <div><i class="fas fa-phone-alt"></i>+91 94442 58376 &nbsp;|&nbsp; +91 97910 53680</div>
+          <div><i class="fas fa-envelope"></i>nesiabooks2014@gmail.com</div>
+          <div><i class="fas fa-clock"></i>Mon – Sat: 9:00 AM – 6:00 PM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section why-section">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <span class="section-eyebrow">Why Schools Trust Us</span>
+      <h2>The Nesia Difference</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="why-grid" id="whyGrid">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section categories-section">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <span class="section-eyebrow" style="color:rgba(212,175,55,0.9)">Browse By</span>
+      <h2 style="color:white">Book Categories</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="categories-grid" id="categoriesGrid">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- PUBLICATIONS -->
+<section class="section books-section" id="books">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <span class="section-eyebrow">Our Catalogue</span>
+      <h2>Publications</h2>
+      <div class="gold-line"></div>
+      <p class="section-lead" style="margin-top:12px">Filter by category, or search by name above</p>
+    </div>
+    <div class="books-toolbar fade-up">
+      <div class="filter-scroll" id="filterBtns"></div>
+      <div class="books-count" id="booksCount"></div>
+    </div>
+    <div class="books-grid" id="booksGrid"></div>
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+      <button class="btn-load-more" onclick="loadMore()">Load More Books <i class="fas fa-chevron-down"></i></button>
+    </div>
+  </div>
+</section>
+
+<!-- BESTSELLERS -->
+<section class="section" style="background:var(--white)" id="bestsellers">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <span class="section-eyebrow">Most Popular</span>
+      <h2>Best Sellers</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="bestsellers-row" id="bestsellerRow"></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section pricing-section" id="pricing">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <span class="section-eyebrow">Affordable Learning</span>
+      <h2>Price List 2025–26</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="price-box fade-up">
+      <div class="price-grid">
+        <div class="price-cat">
+          <h3>Term Series (LKG / UKG)</h3>
+          <ul>
+            <li><span>Spring Kids L.K.G (Term 1–3)</span><span class="price">₹229 each</span></li>
+            <li><span>Spring Kids U.K.G (Term 1–3)</span><span class="price">₹229 each</span></li>
+          </ul>
+          <h3 style="margin-top:28px">Hindi Readers</h3>
+          <ul>
+            <li><span>Roshini Hindi A / B</span><span class="price">₹95 – ₹100</span></li>
+            <li><span>Roshini Hindi I – V</span><span class="price">₹115 each</span></li>
+            <li><span>Roshini Hindi VI – VIII</span><span class="price">₹120 each</span></li>
+          </ul>
+          <h3 style="margin-top:28px">General Knowledge</h3>
+          <ul>
+            <li><span>Wisdom Morsel G.K I – V</span><span class="price">₹120 – ₹130</span></li>
+          </ul>
+          <h3 style="margin-top:28px">Resources</h3>
+          <ul>
+            <li><span>Know Your Talent A – 8</span><span class="price">₹60 – ₹62</span></li>
+            <li><span>Tamil Copy Writing 1 – 5</span><span class="price">₹74 each</span></li>
+          </ul>
+        </div>
+        <div class="price-cat">
+          <h3>New Arrivals 2025–26</h3>
+          <ul>
+            <li><span>Phonics English (A, B, 1–5)</span><span class="price">₹135</span></li>
+            <li><span>Maths Explorer (1–5)</span><span class="price">₹140</span></li>
+            <li><span>Science Curiosity (1–5)</span><span class="price">₹145</span></li>
+            <li><span>Creative Drawing</span><span class="price">₹95</span></li>
+          </ul>
+          <div style="margin-top:32px;padding:24px;background:var(--green-50);border-radius:18px;border:1px solid var(--ink-10)">
+            <div style="font-weight:700;color:var(--green-800);margin-bottom:10px;font-size:0.95rem"><i class="fas fa-info-circle" style="color:var(--gold-500);margin-right:8px"></i>Bulk Order Discounts</div>
+            <p style="color:var(--ink-70);font-size:0.85rem;margin:0">Schools ordering 100+ copies receive special pricing. Contact us via WhatsApp for a custom quote tailored to your institution.</p>
+            <a href="https://wa.me/919444258376?text=Bulk+order+enquiry" target="_blank" style="display:inline-flex;align-items:center;gap:6px;margin-top:14px;background:var(--green-700);color:white;padding:9px 20px;border-radius:100px;text-decoration:none;font-weight:700;font-size:0.82rem"><i class="fab fa-whatsapp"></i> WhatsApp for Bulk Quote</a>
+          </div>
+        </div>
+      </div>
+      <div class="price-download">
+        <a href="Price list 2026-27.pdf" target="_blank" class="btn-primary"><i class="fas fa-download"></i> Download Full Catalogue (PDF)</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section testimonials-section" id="testimonials">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <span class="section-eyebrow">What Schools Say</span>
+      <h2>Trusted by Educators</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="testi-slider fade-up">
+      <div class="testi-track" id="testiTrack"></div>
+      <div class="testi-dots" id="testiDots"></div>
+      <div class="testi-arrows">
+        <button class="testi-arrow" onclick="testiPrev()"><i class="fas fa-chevron-left"></i></button>
+        <button class="testi-arrow" onclick="testiNext()"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER SCHOOLS -->
+<section class="section partners-section">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <span class="section-eyebrow">Our Network</span>
+      <h2>Partner Institutions</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="partners-strip" id="partnersStrip"></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq-section" id="faq">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <span class="section-eyebrow">Common Questions</span>
+      <h2>FAQ</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="faq-list fade-up" id="faqList"></div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<div class="newsletter-section fade-up">
+  <h2>Stay Updated with New Titles</h2>
+  <p>Get notified when new books and academic resources are published</p>
+  <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+    <input type="email" placeholder="Enter your email address" required>
+    <button type="submit">Subscribe <i class="fas fa-arrow-right"></i></button>
+  </form>
+</div>
+
+<!-- GALLERY -->
+<section class="section" style="background:var(--green-50)" id="gallery">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <span class="section-eyebrow">Moments</span>
+      <h2>Publishing Gallery</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact-section" id="contact">
+  <div class="section-inner">
+    <div class="section-head fade-up">
+      <span class="section-eyebrow">Get In Touch</span>
+      <h2>Connect With Us</h2>
+      <div class="gold-line"></div>
+    </div>
+    <div class="contact-grid fade-up">
+      <div class="contact-panel">
+        <h3>Official Office</h3>
+        <p>We're happy to answer enquiries from schools, distributors, and educators.</p>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-map-pin"></i></div>
+          <div class="contact-item-text">
+            <strong>Address</strong>
+            <span>10, 2nd St, Bhaktavatsala Puram, Avadi, Chennai – 600054, Tamil Nadu</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+          <div class="contact-item-text">
+            <strong>Phone</strong>
+            <span>+91 94442 58376 | +91 97910 53680</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+          <div class="contact-item-text">
+            <strong>Email</strong>
+            <span>nesiabooks2014@gmail.com</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-clock"></i></div>
+          <div class="contact-item-text">
+            <strong>Hours</strong>
+            <span>Mon – Sat: 9:00 AM – 6:00 PM</span>
+          </div>
+        </div>
+        <div class="map-embed">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3885.65134774678!2d80.0968882748441!3d13.121259787208055!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5263f7248353c5%3A0x66c243839a9cea98!2sNesia%20Books!5e0!3m2!1sen!2sin!4v1770126993178!5m2!1sen!2sin" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+      <div class="contact-form-wrap">
+        <h3>Send Business Enquiry</h3>
+        <p>We typically respond within 2 business hours.</p>
+        <form id="enquiryForm" action="https://formsubmit.co/nesiabooks2014@gmail.com" method="POST">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <div class="form-row">
+            <div class="form-group"><input type="text" name="Name" placeholder="School / Institution Name" required></div>
+            <div class="form-group"><input type="tel" name="Phone" placeholder="Mobile Number" required></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><input type="text" name="Location" placeholder="City / District" required></div>
+            <div class="form-group">
+              <select name="Type">
+                <option value="">Enquiry Type</option>
+                <option value="New Order">New Order</option>
+                <option value="Bulk Order">Bulk Order</option>
+                <option value="Catalogue Request">Catalogue Request</option>
+                <option value="Distributor">Become a Distributor</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <textarea name="Books Required" placeholder="Which books / classes are you interested in?"></textarea>
+          </div>
+          <button type="submit" class="form-submit">Submit Enquiry <i class="fas fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">NESIA <span>BOOKS</span></div>
+      <p class="footer-about">Official educational publisher based in Chennai, serving schools across India since 2014. Quality books. Affordable prices. Trusted delivery.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+        <a href="https://wa.me/919444258376" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        <a href="mailto:nesiabooks2014@gmail.com" class="social-btn"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#about">About Nesia</a></li>
+        <li><a href="#books">Publications</a></li>
+        <li><a href="#pricing">Price List</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Subject Series</h4>
+      <ul>
+        <li><a href="#">LKG / UKG Books</a></li>
+        <li><a href="#">Hindi Readers</a></li>
+        <li><a href="#">Tamil Writing</a></li>
+        <li><a href="#">General Knowledge</a></li>
+        <li><a href="#">English Phonics</a></li>
+        <li><a href="#">Mathematics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:+919444258376">+91 94442 58376</a></li>
+        <li><a href="tel:+919791053680">+91 97910 53680</a></li>
+        <li><a href="mailto:nesiabooks2014@gmail.com">nesiabooks2014@gmail.com</a></li>
+        <li><a href="#">Avadi, Chennai – 600054</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Nesia Books — Educational Excellence Since 2014</span>
+    <span style="color:rgba(255,255,255,0.4)">Official Publisher, Chennai, India</span>
+  </div>
+</footer>
+
+<!-- FLOATING ACTIONS -->
+<div class="fab-group">
+  <a class="fab-wa" href="https://wa.me/919444258376" target="_blank">
+    <i class="fab fa-whatsapp"></i> Bulk Order Chat
+  </a>
+  <button class="fab-top" id="fabTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+</div>
+
+<script>
+// =============================================
+// BOOK DATA — Add more books here as needed
+// =============================================
+const books = [
+  {
+    id: 1,
+    title: "Wisdom Morsel – GK",
+    category: "GK",
+    classRange: "Classes I – V",
+    image: "wisdom morshel gk 1.jpg",
+    fallback: "https://placehold.co/300x400/2e7d32/white?text=Wisdom+GK",
+    description: "Comprehensive general knowledge series covering current affairs, science, geography, and life skills. Updated 2026 edition.",
+    price: "₹120 – ₹130",
+    badge: "bestseller",
+    featured: true
+  },
+  {
+    id: 2,
+    title: "Spring Kids – LKG",
+    category: "LKG",
+    classRange: "Term I – III",
+    image: "spring kids lkg.jpg",
+    fallback: "https://placehold.co/300x400/1b5e20/white?text=Spring+Kids",
+    description: "Full LKG term series covering English, Maths, and EVS with colorful illustrations for young learners.",
+    price: "₹229 each",
+    badge: "bestseller",
+    featured: true
+  },
+  {
+    id: 3,
+    title: "Roshini Hindi Reader",
+    category: "Hindi",
+    classRange: "A/B, Classes I – VIII",
+    image: "Roshini hindi reader 5.jpg",
+    fallback: "https://placehold.co/300x400/bf8c3e/white?text=Roshini+Hindi",
+    description: "Text-cum-workbook Hindi series designed for gradual language development, from alphabet to advanced reading.",
+    price: "₹95 – ₹120",
+    badge: "bestseller",
+    featured: true
+  },
+  {
+    id: 4,
+    title: "Tamil Copy Writing",
+    category: "Tamil",
+    classRange: "Levels 1 – 5",
+    image: "tamil copy writing 3.jpg",
+    fallback: "https://placehold.co/300x400/8b3a62/white?text=Tamil+Writing",
+    description: "Structured Tamil handwriting practice series for primary school students. Builds neat, consistent letter formation.",
+    price: "₹74 each",
+    featured: true
+  },
+  {
+    id: 5,
+    title: "Phonics & English",
+    category: "English",
+    classRange: "Pre-Primary – Grade 5",
+    image: "phonics_english.jpg",
+    fallback: "https://placehold.co/300x400/1e3a5f/white?text=Phonics+English",
+    description: "Systematic phonics-based English reading series that builds strong language foundations from early years.",
+    price: "₹135",
+    badge: "new",
+    featured: true
+  },
+  {
+    id: 6,
+    title: "Maths Explorer",
+    category: "Maths",
+    classRange: "LKG – Grade 5",
+    image: "maths_workbook.jpg",
+    fallback: "https://placehold.co/300x400/2a5c4a/white?text=Mathematics",
+    description: "Activity-based mathematics workbooks blending conceptual understanding with engaging practice exercises.",
+    price: "₹140",
+    badge: "new",
+    featured: true
+  },
+  {
+    id: 7,
+    title: "Science Curiosity",
+    category: "Science",
+    classRange: "Grades 1 – 5",
+    image: "science_curiosity.jpg",
+    fallback: "https://placehold.co/300x400/4a6b2f/white?text=Science",
+    description: "EVS and general science series that encourages observation, questioning, and scientific thinking.",
+    price: "₹145",
+    badge: "new",
+    featured: true
+  },
+  {
+    id: 8,
+    title: "Creative Drawing",
+    category: "Drawing",
+    classRange: "Levels A, B, C",
+    image: "drawing_art.jpg",
+    fallback: "https://placehold.co/300x400/ab6f4e/white?text=Drawing",
+    description: "Step-by-step drawing and art craft books developing fine motor skills and creative expression.",
+    price: "₹95",
+    badge: "new"
+  }
+];
+
+const categories = [
+  { name: "General Knowledge", key: "GK", icon: "🌍", count: books.filter(b=>b.category==="GK").length },
+  { name: "LKG / UKG", key: "LKG", icon: "🌱", count: books.filter(b=>b.category==="LKG").length },
+  { name: "Hindi", key: "Hindi", icon: "📖", count: books.filter(b=>b.category==="Hindi").length },
+  { name: "Tamil", key: "Tamil", icon: "✍️", count: books.filter(b=>b.category==="Tamil").length },
+  { name: "English", key: "English", icon: "🔤", count: books.filter(b=>b.category==="English").length },
+  { name: "Mathematics", key: "Maths", icon: "🔢", count: books.filter(b=>b.category==="Maths").length },
+  { name: "Science", key: "Science", icon: "🔬", count: books.filter(b=>b.category==="Science").length },
+  { name: "Drawing", key: "Drawing", icon: "🎨", count: books.filter(b=>b.category==="Drawing").length },
+];
+
+const whyData = [
+  { icon: "fas fa-check-double", title: "Syllabus Aligned", text: "100% aligned to national and state board curricula." },
+  { icon: "fas fa-lightbulb", title: "Activity-Based", text: "Exercises that encourage thinking, not just rote learning." },
+  { icon: "fas fa-tags", title: "Affordable Pricing", text: "Quality education materials at accessible prices." },
+  { icon: "fas fa-chalkboard-teacher", title: "Teacher Friendly", text: "Structured format that makes lesson planning easier." },
+  { icon: "fas fa-child", title: "Student Friendly", text: "Age-appropriate language, colorful layouts, clear fonts." },
+  { icon: "fas fa-print", title: "High Quality Print", text: "Premium paper, durable binding, vibrant colours." },
+  { icon: "fas fa-truck", title: "Timely Delivery", text: "Books dispatched before the academic session begins." },
+  { icon: "fas fa-headset", title: "Dedicated Support", text: "Personal account manager for each school partner." },
+];
+
+const testimonials = [
+  {
+    quote: "Nesia Books has been our school's trusted partner for five years. The Roshini Hindi series has made language teaching so much more effective for our students.",
+    name: "Mrs. Priya Krishnamurthy",
+    role: "Academic Director, Vel's Primary School, Chennai",
+    initials: "PK"
+  },
+  {
+    quote: "The Spring Kids LKG series is exceptionally well-designed. Children love the colorful pages, and teachers appreciate how well it maps to the curriculum.",
+    name: "Mr. Suresh Babu",
+    role: "Principal, Bharathi Matriculation School, Avadi",
+    initials: "SB"
+  },
+  {
+    quote: "We've been using the Wisdom Morsel GK series for three years. Parents regularly comment on how their children's general awareness has improved noticeably.",
+    name: "Mrs. Lakshmi Venkat",
+    role: "Head of Curriculum, Sri Venkateswara CBSE School",
+    initials: "LV"
+  },
+  {
+    quote: "The delivery is always on time and the print quality is consistently excellent. That reliability is exactly what we need at the start of each academic year.",
+    name: "Mr. Anand Rajan",
+    role: "School Manager, Tamil Nadu Government-Aided School",
+    initials: "AR"
+  },
+];
+
+const faqs = [
+  { q: "How do I place a bulk order for my school?", a: "Contact us via WhatsApp at +91 94442 58376 or email nesiabooks2014@gmail.com. We offer customised pricing for schools ordering 100+ copies across any title." },
+  { q: "Are the books aligned to the state board and CBSE syllabus?", a: "Yes. All Nesia Books titles are developed to align with both the Tamil Nadu State Board and CBSE syllabi for the respective grades." },
+  { q: "What is your delivery timeline after placing an order?", a: "Standard delivery is within 5–7 working days for locations in Tamil Nadu, and 7–10 days for other states. Bulk school orders are coordinated to arrive before the academic session." },
+  { q: "Can I request a sample copy before placing an order?", a: "Yes, we can dispatch complimentary sample copies to school principals or academic heads. Please contact us with your school details and the titles you'd like to review." },
+  { q: "Do you offer distributor / reseller partnerships?", a: "We are always looking to grow our distribution network. If you're interested in becoming an authorised distributor, please send your details to nesiabooks2014@gmail.com." },
+  { q: "Are digital or e-book versions available?", a: "Currently our catalogue is available in print format only. We are working on digital supplements for select titles which will be available in the 2026–27 academic year." },
+];
+
+const partners = [
+  "Vel's Primary School", "Bharathi Matric School", "Sri Venkateswara CBSE",
+  "KV Avadi", "Holy Cross Matric", "Montfort School",
+  "SRM Public School", "RVS Matriculation", "Chinmaya Vidyalaya",
+  "Government Boys HSS Avadi", "DAV Public School", "Little Flower School",
+];
+
+const galleryItems = ["📚","🏫","✏️","🎨","📝","🌟","🏆","📖","🎓","🖊️","🌈","📐"];
+
+// =============================================
+// RENDER FUNCTIONS
+// =============================================
+let currentFilter = "all";
+let visibleCount = 8;
+
+function renderCategories() {
+  const g = document.getElementById("categoriesGrid");
+  g.innerHTML = categories.map(c => `
+    <div class="cat-card" onclick="filterBooks('${c.key}')">
+      <span class="cat-icon">${c.icon}</span>
+      <h4>${c.name}</h4>
+      <span>${c.count} title${c.count!==1?"s":""}</span>
+    </div>
+  `).join("");
+}
+
+function renderFilterBtns() {
+  const container = document.getElementById("filterBtns");
+  const allCats = ["all", ...categories.map(c=>c.key)];
+  const labels = { all: "All Books", GK: "Gen. Knowledge", LKG: "LKG / UKG", Hindi: "Hindi", Tamil: "Tamil", English: "English", Maths: "Maths", Science: "Science", Drawing: "Drawing" };
+  container.innerHTML = allCats.map(k => `
+    <button class="filter-btn ${k===currentFilter?"active":""}" onclick="filterBooks('${k}')">${labels[k]||k}</button>
+  `).join("");
+}
+
+function filterBooks(cat) {
+  currentFilter = cat;
+  visibleCount = 8;
+  renderFilterBtns();
+  renderBooks();
+  // sync categories
+  document.querySelectorAll(".cat-card").forEach((c,i) => {
+    c.classList.toggle("active-cat", categories[i].key === cat);
+  });
+}
+
+function renderBooks() {
+  const filtered = currentFilter === "all" ? books : books.filter(b => b.category === currentFilter);
+  const visible = filtered.slice(0, visibleCount);
+  const grid = document.getElementById("booksGrid");
+  document.getElementById("booksCount").textContent = `${filtered.length} book${filtered.length!==1?"s":""}`;
+  grid.innerHTML = visible.map(b => `
+    <div class="book-card fade-up" onclick="openModal(${b.id})">
+      ${b.badge ? `<div class="book-badge ${b.badge==="new"?"new":""}">${b.badge==="new"?"New Arrival":"⭐ Bestseller"}</div>` : ""}
+      <div class="book-img">
+        <img src="${b.image}" alt="${b.title}" onerror="this.src='${b.fallback}'">
+      </div>
+      <span class="book-tag">${b.category}</span>
+      <h3>${b.title}</h3>
+      <p class="book-meta">${b.classRange}</p>
+      <div class="book-actions">
+        <a href="https://wa.me/919444258376?text=${encodeURIComponent("Enquiry for "+b.title)}" target="_blank" class="btn-enquire" onclick="event.stopPropagation()">
+          <i class="fab fa-whatsapp"></i> Enquire
+        </a>
+        <button class="btn-preview" onclick="event.stopPropagation();openModal(${b.id})" title="Preview"><i class="fas fa-eye"></i></button>
+      </div>
+    </div>
+  `).join("");
+  document.getElementById("loadMoreWrap").style.display = filtered.length > visibleCount ? "block" : "none";
+  observeFadeUps();
+}
+
+function loadMore() {
+  visibleCount += 8;
+  renderBooks();
+}
+
+function renderBestsellers() {
+  const featured = books.filter(b => b.featured);
+  document.getElementById("bestsellerRow").innerHTML = featured.map(b => `
+    <div class="bs-card" onclick="openModal(${b.id})">
+      <div class="bs-img"><img src="${b.image}" alt="${b.title}" onerror="this.src='${b.fallback}'"></div>
+      <h4>${b.title}</h4>
+      <p>${b.classRange}</p>
+    </div>
+  `).join("");
+}
+
+function renderWhyGrid() {
+  document.getElementById("whyGrid").innerHTML = whyData.map(w => `
+    <div class="why-card fade-up">
+      <div class="why-icon"><i class="${w.icon}" style="color:var(--green-700)"></i></div>
+      <h4>${w.title}</h4>
+      <p>${w.text}</p>
+    </div>
+  `).join("");
+}
+
+function renderTestimonials() {
+  const track = document.getElementById("testiTrack");
+  const dots = document.getElementById("testiDots");
+  track.innerHTML = testimonials.map(t => `
+    <div class="testi-card">
+      <div class="testi-inner">
+        <div class="testi-stars">${"★".repeat(5)}</div>
+        <blockquote>"${t.quote}"</blockquote>
+        <div class="testi-author">
+          <div class="testi-avatar">${t.initials}</div>
+          <div class="testi-author-info">
+            <strong>${t.name}</strong>
+            <span>${t.role}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join("");
+  dots.innerHTML = testimonials.map((_,i) => `
+    <button class="testi-dot ${i===0?"active":""}" onclick="goToTesti(${i})"></button>
+  `).join("");
+}
+
+function renderPartners() {
+  document.getElementById("partnersStrip").innerHTML = partners.map(p => `<div class="partner-chip">${p}</div>`).join("");
+}
+
+function renderFAQ() {
+  document.getElementById("faqList").innerHTML = faqs.map((f,i) => `
+    <div class="faq-item" id="faq-${i}">
+      <button class="faq-q" onclick="toggleFAQ(${i})">
+        <span>${f.q}</span>
+        <i class="fas fa-plus"></i>
+      </button>
+      <div class="faq-a">${f.a}</div>
+    </div>
+  `).join("");
+}
+
+function renderGallery() {
+  document.getElementById("galleryGrid").innerHTML = galleryItems.map(e => `
+    <div class="gallery-item">${e}</div>
+  `).join("");
+}
+
+// =============================================
+// TESTIMONIAL SLIDER
+// =============================================
+let testiIdx = 0;
+let testiAuto;
+
+function goToTesti(i) {
+  testiIdx = i;
+  document.getElementById("testiTrack").style.transform = `translateX(-${i*100}%)`;
+  document.querySelectorAll(".testi-dot").forEach((d,j) => d.classList.toggle("active", j===i));
+}
+function testiNext() { goToTesti((testiIdx+1) % testimonials.length); }
+function testiPrev() { goToTesti((testiIdx-1+testimonials.length) % testimonials.length); }
+
+function startTestiAuto() {
+  testiAuto = setInterval(testiNext, 5000);
+}
+
+// =============================================
+// MODAL
+// =============================================
+function openModal(id) {
+  const b = books.find(x => x.id === id);
+  if (!b) return;
+  document.getElementById("modal-title").textContent = b.title;
+  document.getElementById("modal-cat").textContent = `${b.category} | ${b.classRange}`;
+  document.getElementById("modal-img").src = b.image;
+  document.getElementById("modal-img").onerror = function(){ this.src = b.fallback; };
+  document.getElementById("modal-desc").textContent = b.description;
+  document.getElementById("modal-price").textContent = b.price;
+  document.getElementById("modal-wa").href = `https://wa.me/919444258376?text=${encodeURIComponent("Enquiry for "+b.title)}`;
+  document.getElementById("bookModal").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeModal() {
+  document.getElementById("bookModal").classList.remove("open");
+  document.body.style.overflow = "";
+}
+document.getElementById("bookModal").addEventListener("click", e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// =============================================
+// FAQ
+// =============================================
+function toggleFAQ(i) {
+  const item = document.getElementById("faq-"+i);
+  const wasOpen = item.classList.contains("open");
+  document.querySelectorAll(".faq-item").forEach(x => x.classList.remove("open"));
+  if (!wasOpen) item.classList.add("open");
+}
+
+// =============================================
+// SEARCH
+// =============================================
+function openSearch() {
+  document.getElementById("searchOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+  setTimeout(() => document.getElementById("searchInput").focus(), 100);
+}
+function closeSearch() {
+  document.getElementById("searchOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+  document.getElementById("searchInput").value = "";
+  document.getElementById("searchResults").innerHTML = "";
+}
+document.getElementById("searchOverlay").addEventListener("click", e => {
+  if (e.target === e.currentTarget) closeSearch();
+});
+document.getElementById("searchInput").addEventListener("input", function() {
+  const q = this.value.trim().toLowerCase();
+  const res = document.getElementById("searchResults");
+  if (!q) { res.innerHTML = ""; return; }
+  const matches = books.filter(b =>
+    b.title.toLowerCase().includes(q) ||
+    b.category.toLowerCase().includes(q) ||
+    b.classRange.toLowerCase().includes(q)
+  );
+  if (!matches.length) {
+    res.innerHTML = `<div class="search-empty"><i class="fas fa-search" style="font-size:1.8rem;margin-bottom:10px;display:block;opacity:0.3"></i>No books found for "${this.value}"</div>`;
+    return;
+  }
+  res.innerHTML = matches.map(b => `
+    <div class="search-result-item" onclick="closeSearch();openModal(${b.id})">
+      <img src="${b.image}" alt="${b.title}" onerror="this.src='${b.fallback}'">
+      <div class="search-result-meta">
+        <strong>${b.title}</strong>
+        <span>${b.classRange}</span>
+      </div>
+      <span class="search-badge">${b.category}</span>
+    </div>
+  `).join("");
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") { closeSearch(); closeModal(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === "k") { e.preventDefault(); openSearch(); }
+});
+
+// =============================================
+// DARK MODE
+// =============================================
+function toggleDark() {
+  const d = document.documentElement.getAttribute("data-theme") === "dark";
+  document.documentElement.setAttribute("data-theme", d ? "light" : "dark");
+  document.getElementById("darkBtn").innerHTML = d ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+  localStorage.setItem("theme", d ? "light" : "dark");
+}
+(function() {
+  const t = localStorage.getItem("theme");
+  if (t === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+    document.getElementById("darkBtn").innerHTML = '<i class="fas fa-sun"></i>';
+  }
+})();
+
+// =============================================
+// MOBILE MENU
+// =============================================
+function toggleMenu() {
+  const menu = document.getElementById("mobileMenu");
+  const btn = document.getElementById("hamburger");
+  menu.classList.toggle("open");
+  btn.classList.toggle("open");
+}
+
+// =============================================
+// SCROLL EFFECTS
+// =============================================
+window.addEventListener("scroll", () => {
+  const scrolled = window.scrollY;
+  const total = document.body.scrollHeight - window.innerHeight;
+  document.getElementById("scroll-progress").style.width = (scrolled/total*100) + "%";
+  document.getElementById("mainNav").classList.toggle("scrolled", scrolled > 20);
+  document.getElementById("fabTop").classList.toggle("visible", scrolled > 400);
+
+  // Active nav link
+  const sections = ["home","about","books","pricing","testimonials","contact"];
+  let current = "";
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < 150) current = id;
+  });
+  document.querySelectorAll(".nav-links a").forEach(a => {
+    a.classList.toggle("active", a.getAttribute("href") === "#"+current);
+  });
+});
+
+// =============================================
+// 3D INTERACTION ENGINE
+// =============================================
+const supportsFineHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const enable3D = supportsFineHover && !prefersReducedMotion;
+
+function resetTilt(card) {
+  card.style.transform = "";
+  card.classList.remove("tilting");
+}
+
+// Delegated tilt: works even on cards rendered dynamically by other functions
+function setupTiltDelegation(containerSelector, cardSelector, maxRotate = 10, liftScale = 1.025) {
+  const container = document.querySelector(containerSelector);
+  if (!container) return;
+  let current = null;
+  container.addEventListener("mousemove", (e) => {
+    const card = e.target.closest(cardSelector);
+    if (!card || !container.contains(card)) {
+      if (current) { resetTilt(current); current = null; }
+      return;
+    }
+    current = card;
+    const rect = card.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    const rx = (0.5 - py) * maxRotate;
+    const ry = (px - 0.5) * maxRotate;
+    card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${liftScale})`;
+    card.classList.add("tilting");
+  });
+  container.addEventListener("mouseleave", () => {
+    if (current) { resetTilt(current); current = null; }
+  });
+}
+
+// Direct tilt for a single static element
+function setupTiltDirect(el, maxRotate = 8, liftScale = 1.015) {
+  if (!el) return;
+  el.addEventListener("mousemove", (e) => {
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    const rx = (0.5 - py) * maxRotate;
+    const ry = (px - 0.5) * maxRotate;
+    el.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${liftScale})`;
+  });
+  el.addEventListener("mouseleave", () => { el.style.transform = ""; });
+}
+
+// Hero scene: perspective camera that tilts toward the cursor, plus a following spotlight
+function setupHeroParallax() {
+  const heroVisual = document.getElementById("heroVisual");
+  const heroScene = document.getElementById("heroScene");
+  const heroSpotlight = document.getElementById("heroSpotlight");
+  if (!heroVisual || !heroScene) return;
+  heroVisual.addEventListener("mousemove", (e) => {
+    const rect = heroVisual.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    const rx = (0.5 - py) * 16;
+    const ry = (px - 0.5) * 20;
+    heroScene.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+    if (heroSpotlight) {
+      heroSpotlight.style.setProperty("--mx", (px * 100) + "%");
+      heroSpotlight.style.setProperty("--my", (py * 100) + "%");
+    }
+  });
+  heroVisual.addEventListener("mouseleave", () => {
+    heroScene.style.transform = "rotateX(0deg) rotateY(0deg)";
+  });
+}
+
+// Ambient drifting particles in the hero, purely decorative
+function createHeroParticles() {
+  const wrap = document.getElementById("heroParticles");
+  if (!wrap) return;
+  const count = prefersReducedMotion ? 0 : 16;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement("div");
+    p.className = "hero-particle";
+    const size = Math.random() * 4 + 2;
+    p.style.width = size + "px";
+    p.style.height = size + "px";
+    p.style.left = Math.random() * 100 + "%";
+    p.style.top = (55 + Math.random() * 38) + "%";
+    p.style.setProperty("--drift", (Math.random() * 50 - 25) + "px");
+    p.style.animationDuration = (7 + Math.random() * 9) + "s";
+    p.style.animationDelay = (Math.random() * 9) + "s";
+    wrap.appendChild(p);
+  }
+}
+
+// Magnetic pull on primary call-to-action buttons
+function setupMagnetic(selector, strength = 12) {
+  document.querySelectorAll(selector).forEach((btn) => {
+    btn.addEventListener("mousemove", (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+      const y = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+      btn.style.transform = `translate(${x * strength}px, ${y * strength - 2}px)`;
+    });
+    btn.addEventListener("mouseleave", () => { btn.style.transform = ""; });
+  });
+}
+
+function init3D() {
+  if (!enable3D) return;
+  setupTiltDelegation("#booksGrid", ".book-card", 9, 1.025);
+  setupTiltDelegation("#whyGrid", ".why-card", 10, 1.03);
+  setupTiltDelegation("#categoriesGrid", ".cat-card", 8, 1.04);
+  setupTiltDelegation("#bestsellerRow", ".bs-card", 8, 1.03);
+  setupTiltDelegation("#testiTrack", ".testi-inner", 5, 1.01);
+  setupTiltDelegation(".stats-bar", ".stat-item", 12, 1.06);
+  setupTiltDirect(document.getElementById("aboutCard"), 6, 1.01);
+  setupHeroParallax();
+  setupMagnetic(".btn-primary, .btn-outline, .nav-cta", 10);
+}
+
+createHeroParticles();
+document.addEventListener("DOMContentLoaded", init3D);
+
+// Staggered reveal: replaces the simple fade-up observer with a version that
+// adds a short, position-based delay so grids reveal in a wave rather than all at once
+function observeFadeUps() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        const siblings = Array.from(e.target.parentElement.children).filter((c) => c.classList.contains("fade-up"));
+        const idx = siblings.indexOf(e.target);
+        e.target.style.transitionDelay = Math.min(idx, 8) * 70 + "ms";
+        e.target.classList.add("visible");
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".fade-up:not(.visible)").forEach((el) => obs.observe(el));
+}
+
+// =============================================
+// ANIMATED COUNTERS
+// =============================================
+function animateCounter(el) {
+  const target = parseInt(el.getAttribute("data-target"));
+  const suffix = target >= 1000 ? "+" : "+";
+  const duration = 1800;
+  const start = performance.now();
+  function step(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const value = Math.floor(ease * target);
+    el.textContent = value >= 1000 ? (value/1000).toFixed(0)+"K" + suffix : value + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target >= 1000 ? (target/1000).toFixed(0)+"K+" : target + "+";
+  }
+  requestAnimationFrame(step);
+}
+
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCounter(e.target);
+      counterObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll(".stat-num[data-target]").forEach(el => counterObs.observe(el));
+
+// =============================================
+// TOAST
+// =============================================
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  document.getElementById("toast-msg").textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 3500);
+}
+
+// =============================================
+// NEWSLETTER
+// =============================================
+function subscribeNewsletter(e) {
+  e.preventDefault();
+  showToast("Thank you for subscribing! We'll keep you updated.");
+  e.target.reset();
+}
+
+// =============================================
+// FORM
+// =============================================
+document.getElementById("enquiryForm").addEventListener("submit", function(e) {
+  const name = this.querySelector('[name="Name"]').value;
+  const books_req = this.querySelector('[name="Books Required"]').value;
+  setTimeout(() => {
+    window.open(`https://wa.me/919444258376?text=${encodeURIComponent("Enquiry from "+name+(books_req?": "+books_req:""))}`, "_blank");
+  }, 800);
+});
+
+// =============================================
+// INIT
+// =============================================
+document.addEventListener("DOMContentLoaded", () => {
+  renderCategories();
+  renderFilterBtns();
+  renderBooks();
+  renderBestsellers();
+  renderWhyGrid();
+  renderTestimonials();
+  renderPartners();
+  renderFAQ();
+  renderGallery();
+  observeFadeUps();
+  startTestiAuto();
+});
+
+// Hide loader
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    document.getElementById("loader").classList.add("hidden");
+  }, 1600);
+});
+</script>
+</body>
+</html>
